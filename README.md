@@ -1,7 +1,7 @@
 # Honoursproject
 Python code pertaining to my GW lab project.
 
-So far contains 3 files:
+So far contains 5 files:
 
 extradim.py contains leakageparam class object which has all the tools you could need (I could think of) to infer the number of spacetime dimensions from GW events.
 Requires numpy, scipy, astropy, emcee, corner, matplotlib and cosmo.
@@ -9,4 +9,8 @@ Requires numpy, scipy, astropy, emcee, corner, matplotlib and cosmo.
 cosmo.py is contains lots of neat cosmology functions and it required by extradim.
 
 dVddL.txt is a uniform in comoving-volume-time distance prior assuming a Planck 2015 cosmology. Required if your distance posterior had this prior.
+
+demo.ipynb is a python notebook demonstrating the awesome power of extradim
+
+distpostGW19.txt is a text file containg distance posterior samples (Thanks John <3) used in the demo.
 
