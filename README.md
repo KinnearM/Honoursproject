@@ -4,6 +4,7 @@ Python code pertaining to my GW lab project.
 So far contains 3 files:
 
 extradim.py contains leakageparam class object which has all the tools you could need (I could think of) to infer the number of spacetime dimensions from GW events.
+Requires numpy, scipy, astropy, emcee, corner, matplotlib and cosmo.
 
 cosmo.py is contains lots of neat cosmology functions and it required by extradim.
 
