@@ -238,7 +238,7 @@ class leakageparam:
     
         priors=zprior(z, H0, omm)
 
-        post=Pxd*Pz*priors#*beta(gamma, z, H0, omm)
+        post=Pxd*Pz*priors*beta(gamma, z, H0, omm)
     
         return  post
     
