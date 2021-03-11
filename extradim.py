@@ -589,5 +589,5 @@ def beta(gamma, z, H0, omm):
     
     front=4*np.pi*d**(2*gamma)
     back=gamma*dv*(1+z)*d**(gamma-1)-d**gamma
-    denom=(1+z)**4
+    denom=(1+z)**4*dVdz(z, H0, omm)
     return front*back/denom
