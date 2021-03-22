@@ -404,7 +404,7 @@ class leakageparam:
         self.cdffunc=inter.interp1d(CDF,bins[:-1]) 
         
         self.max=np.argmax(self.Pgamma[0])
-        self.Max=self.Pgamma[1][self.max]
+        self.Max=self.Pgamma[1][self.max]+self.shiftt
         
         self.P16=self.cdffunc(0.16)+self.shiftt
         self.P84=self.cdffunc(0.84)+self.shiftt
