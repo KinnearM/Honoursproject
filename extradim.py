@@ -86,6 +86,13 @@ class leakageparam:
         if distprior== 'Planck15':
             tp=np.loadtxt('dvddl.txt') #Planck15 dist prior uniform in comoving volume (not time) 
             self.transprior = inter.interp1d(tp[0],tp[1]) #prior used to get p(x|d) from p(d|x)
+            
+        self.minz=self.z[0]-5*self.z[1]
+        self.maxz=self.z[0]+5*self.z[1]
+        self.minH=self.H[0]-5*self.H[1]
+        self.maxH=self.H[0]+5*self.H[1]
+        self.minomm=self.omm[0]-5*self.omm[1]
+        self.maxomm=self.omm[0]+5*self.omm[1]
                 
         self.EMdist = cosmo.DL(self.z[0], self.H[0], self.omm[0]) #finds mean distance of EM signal
         if self.flat==True:
@@ -267,7 +274,7 @@ class leakageparam:
         
         #prob=0 for silly parameter values
     
-        if self.gmin<gamma<self.gmax and 6<H0<141 and 0.28<=omm<=0.34 and 0<z<1:
+        if self.gmin<gamma<self.gmax and self.minH<H0<self.maxH and self.minomm<=omm<=self.maxomm and self.minz<z<self.maxz:
 
             oms=omm*(1+z)**3 + (1-omm)
         
@@ -296,7 +303,7 @@ class leakageparam:
         
         #prob=0 for silly parameter values
     
-        if self.gmin<gamma<self.gmax and 20<H0<300 and 0.2<=omm<=1 and 0<z<1:
+        if self.gmin<gamma<self.gmax and 20<H0<300 and 0.2<=omm<=1 and self.minz<z<self.maxz:
         
             oms=omm*(1+z)**3 + (1-omm)
         
