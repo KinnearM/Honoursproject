@@ -72,6 +72,10 @@ class leakageparam:
             self.H=67.81, 0.92
             self.omm= 0.308, 0.012
             
+        if priors=='SH0ES19':
+            self.H=73.20, 1.3
+            self.omm=0.30, 0.13
+            
         if priors=='flat':
             self.flat=True
             self.logprob=self.logprobflat
