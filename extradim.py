@@ -60,6 +60,9 @@ class leakageparam:
         self.logprob=self.Logprob #setting cosmo to False allows sampling in H0 and omega_matter
         self.sample=self.Sample #samples in 4 parameters
         self.corner=self.Corner #plots in 4 parameters
+        
+        self.gmin=0.75
+        self.gmax=1.2
 
         if priors=='Planck18':
             self.H=67.37,0.54
@@ -74,6 +77,8 @@ class leakageparam:
             self.logprob=self.logprobflat
             self.H=160,80
             self.omm=0.6,0.3
+            self.gmin=0.5
+            self.gmax=2.5
                    
         if distprior=='Euclidean':
             self.transprior=self.dsq
@@ -110,7 +115,7 @@ class leakageparam:
         ##Find peak gamma to give emcee a starting point on mode
         
         self.gammas=np.zeros(10000) #array to fill with P(gamma|theta) where theta is the most probable value of each other parameter
-        gammarange=np.linspace(0.75,1.2,10000)
+        gammarange=np.linspace(self.gmin,self.gmax,10000)
         
         for i,I in enumerate(gammarange):
             
@@ -262,7 +267,7 @@ class leakageparam:
         
         #prob=0 for silly parameter values
     
-        if 0.75<gamma<1.2 and 6<H0<141 and 0.28<=omm<=0.34 and 0<z<1:
+        if self.gmin<gamma<self.gmax and 6<H0<141 and 0.28<=omm<=0.34 and 0<z<1:
 
             oms=omm*(1+z)**3 + (1-omm)
         
@@ -291,7 +296,7 @@ class leakageparam:
         
         #prob=0 for silly parameter values
     
-        if 0.5<gamma<2.5 and 20<H0<300 and 0.2<=omm<=1 and 0<z<1:
+        if self.gmin<gamma<self.gmax and 20<H0<300 and 0.2<=omm<=1 and 0<z<1:
         
             oms=omm*(1+z)**3 + (1-omm)
         
@@ -353,7 +358,7 @@ class leakageparam:
         if 20000<=num:
             binnum=45
         
-        n, bins, patch = vis.hist(self.histosamp,bins=binnum,range=(0.75,1.2))
+        n, bins, patch = vis.hist(self.histosamp,bins=binnum,range=(self.gmin,self.gmax))
         plt.clf() #dinnae
         
         summ=np.sum(n)
@@ -434,9 +439,9 @@ class leakageparam:
         axT = ax.twiny()
         axT.set_xlabel('$\gamma$')
 
-        ax.set_xlim(2*0.75+2, 2*1.2+2)
+        ax.set_xlim(2*self.gmin+2, 2*self.gmax+2)
         ax.set_ylim(-MAX/10,MAX+MAX/10)
-        axT.set_xlim(0.75,1.2)
+        axT.set_xlim(self.gmin,self.gmax)
         nonsym_lim_low=self.P5
         nonsym_lim_high=self.P95
         ax.xaxis.set_minor_locator(MultipleLocator(0.05))
