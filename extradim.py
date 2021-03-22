@@ -599,11 +599,10 @@ def ddLdz(z, H0, omm):
     return (1+z)*c/(H0*cosmo.EZ(z,omm))+d/(1+z)
 
 def beta(gamma, z, H0, omm):
-       
-    d=cosmo.DL(z,H0,omm)
-    dv=ddLdz(z, H0, omm)
     
-    front=4*np.pi*d**(2*gamma)
-    back=gamma*dv*(1+z)*d**(gamma-1)-d**gamma
-    denom=(1+z)**4*dVdz(z, H0, omm)
-    return front*back/denom
+    d=cosmo.DL(z,H0,omm)
+    ez=cosmo.EZ(z,omm)
+    
+    front=(4*np.pi*d**(3*gamma))/(1+z)**4
+    back=gamma-1+(c/H0)*((gamma*(1+z))/(d*ez))
+    return front*back/dVdz(z, H0, omm)
