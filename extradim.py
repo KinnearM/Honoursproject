@@ -79,8 +79,8 @@ class leakageparam:
         if priors=='flat':
             self.flat=True
             self.logprob=self.logprobflat
-            self.H=160,80
-            self.omm=0.6,0.3
+            self.H=160,8
+            self.omm=0.6,0.03
             self.gmin=0.5
             self.gmax=2.5
                    
@@ -352,14 +352,14 @@ class leakageparam:
             
         sampler = emcee.EnsembleSampler(self.nwalkers, self.ndim, self.logprob)
         
-        sampler.run_mcmc(p0,self.sampleno)
+        sampler.run_mcmc(p0,self.sampleno,progress=True)
         
         self.chain=sampler.chain
         self.acceptance=sampler.acceptance_fraction       
-        self.samples=self.chain[:, 100:, :].reshape((-1, self.ndim))
+        self.samples=self.chain[:, 200:, :].reshape((-1, self.ndim))
         self.gammasamples=self.samples.T[0]
                         
-        self.histosamp=np.reshape(self.chain[:,100:,0],self.nwalkers*(self.sampleno-100))
+        self.histosamp=np.reshape(self.chain[:,200:,0],self.nwalkers*(self.sampleno-200))
         
         num=len(self.histosamp)
         if num<10000:
