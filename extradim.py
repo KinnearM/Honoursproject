@@ -197,7 +197,7 @@ class leakageparam:
         
         zp=zprior(z, H0, omm) #uniform in comoving volume time
               
-        return H0p*ommp*zp
+        return H0p + ommp + zp
         
         
     def zlike(self,zt):
@@ -232,7 +232,7 @@ class leakageparam:
     
         priors=self.prior(gamma,H0,omm,z)
 
-        post=Pxd*Pz*priors*beta(gamma, z, H0, omm)
+        post=Pxd + Pz + priors + beta(gamma, z, H0, omm)
     
         return  post
     
@@ -254,7 +254,7 @@ class leakageparam:
     
         priors=zprior(z, H0, omm)
 
-        post=Pxd*Pz*priors*beta(gamma, z, H0, omm)
+        post=Pxd + Pz + priors + beta(gamma, z, H0, omm)
     
         return  post
     
@@ -284,8 +284,8 @@ class leakageparam:
         
             if oms>0:
                 
-                loglike = np.log(self.likefn(gamma,H0,omm,z))
-                logprior=np.log(self.prior(gamma,H0,omm,z))
+                loglike = self.likefn(gamma,H0,omm,z)
+                logprior= self.prior(gamma,H0,omm,z)
                 
         return loglike, logprior
     
@@ -303,7 +303,7 @@ class leakageparam:
     
         loglike= -np.inf
         
-        logprior=-np.inf
+        logprior= -np.inf
         
         #prob=0 for silly parameter values
     
@@ -313,15 +313,15 @@ class leakageparam:
         
             if oms>0:
                 
-                loglike = np.log(self.likefnflat(gamma,H0,omm,z))
-                logprior=np.log(zprior(z, H0, omm))
+                loglike = self.likefnflat(gamma,H0,omm,z)
+                logprior= zprior(z, H0, omm)
                 
         return loglike, logprior
        
     
     def dsq(self,d):
         
-        return 4*np.pi*d**2
+        return 2*np.log(d)
     
         
     def Sample(self,sampleno, nwalkers):
@@ -498,10 +498,10 @@ def gaussx(m,s,x):
             the gaussian with mean m and standard deviation s evaluated at x
     """
     
-    gauss = 1/(np.sqrt(2*np.pi)*s)*np.exp((-0.5*((x-m)/s)**2))
+    gauss = (-(x-m)**2)/(2*s**2)
     
     return gauss
-
+    
 def histo(data):
     
     """
@@ -557,13 +557,14 @@ def GWD(dGWL, n, bins):
 
     """ 
     
-    prob=0 #likelihood is 0 outside of bins
+    prob=-np.inf #likelihood is 0 outside of bins
     
     if bins[0]<=dGWL<=bins[-2]: #otherwise
         
         ind=np.searchsorted(bins, dGWL, side='left') #finds index of bin containing d
         
-        prob=n[ind] #likelihood at d
+        prob=np.log(n[ind]) #likelihood at d
+
         
     return prob
 
@@ -578,9 +579,9 @@ def dVdz(z, H0, omm):
         d=cosmo.DL(z,H0,omm)
         dm=d/(1+z)
         ez=cosmo.EZ(z,omm)
-        prior=cosmo.dH(H0)*dm**2/ez
+        prior=np.log(cosmo.dH(H0)*dm**2/ez)
     else:
-        prior=0
+        prior=-np.inf
     return prior
 
 def zprior(z, H0, omm):
@@ -589,9 +590,9 @@ def zprior(z, H0, omm):
         d=cosmo.DL(z,H0,omm)
         dm=d/(1+z)
         ez=cosmo.EZ(z,omm)
-        prior=cosmo.dH(H0)*dm**2/(ez*(1+z))
+        prior=np.log(cosmo.dH(H0)*dm**2/(ez*(1+z)))
     else:
-        prior=0
+        prior=-np,inf
     return prior
 
 def ddLdz(z, H0, omm):
@@ -605,4 +606,4 @@ def beta(gamma, z, H0, omm):
     
     front=(4*np.pi*d**(3*gamma))/(1+z)**4
     back=gamma-1+(c/H0)*((gamma*(1+z))/(d*ez))
-    return front*back/dVdz(z, H0, omm)
+    return np.log(front*back/dVdz(z, H0, omm))
